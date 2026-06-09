@@ -619,6 +619,83 @@
       color: rgba(255,255,255,0.5); text-align: center;
       padding: 0 8px;
     }
+
+    /* ── RESPONSIVIDADE (MOBILE) ─────────────────────────── */
+    @media (max-width: 768px) {
+      /* 1. Reduzir paddings gerais de todas as seções */
+      section, footer {
+        padding: 60px 24px !important;
+      }
+      
+      /* 2. Ajuste da Barra de Navegação */
+      nav {
+        padding: 0 24px;
+      }
+      .nav-links, .nav-logos {
+        display: none; /* Oculta os links e a logo da faculdade para caber o botão e a logo principal */
+      }
+      
+      /* 3. Transformar grids de múltiplas colunas em 1 coluna */
+      #hero, #quem-somos, .footer-top {
+        grid-template-columns: 1fr;
+        gap: 40px;
+        text-align: center;
+      }
+      
+      .steps-grid, .srv-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      /* Equipe: 2 pessoas por linha no mobile para poupar espaço */
+      .coord-grid {
+        grid-template-columns: repeat(2, 1fr); 
+        gap: 20px;
+      }
+  
+      /* 4. Ajustes Específicos do Hero (Início) */
+      #hero {
+        padding-top: 100px !important; 
+      }
+      .hero-title {
+        font-size: 2.5rem; /* Evita que o texto vaze na horizontal */
+      }
+      .hero-subtitle {
+        margin: 0 auto 32px auto;
+      }
+      .hero-actions {
+        justify-content: center; /* Centraliza os botões */
+      }
+      .hero-illus-wrap {
+        width: 100%;
+        max-width: 320px;
+        height: auto;
+      }
+      .hero-illus-wrap img {
+        width: 100%;
+      }
+      
+      /* 5. Ajuste da Imagem no "Quem Somos" */
+      .qs-visual > div {
+        width: 100%;
+        max-width: 320px;
+      }
+      
+      /* 6. Card do WhatsApp */
+      .wa-card {
+        padding: 40px 20px;
+      }
+      
+      /* 7. Alinhamentos do Rodapé */
+      .footer-logos {
+        flex-direction: column;
+        text-align: center;
+        justify-content: center;
+      }
+      .footer-org-logos {
+        justify-content: center;
+      }
+    }
+    
   </style>
 </head>
 <body>
