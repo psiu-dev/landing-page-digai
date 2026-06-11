@@ -1,0 +1,1244 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DigAI — Acolhimento Virtual FCF-USP</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --wa-green:     #4a9e72;
+      --purple-dark:  #5c2a7f;
+      --purple-mid:   #876b9b;
+      --purple-light: #c4a8d8;
+      --teal:         #97bec7;
+      --teal-light:   #d0e8ed;
+      --yellow:       #f7ea6e;
+      --cream:        #eae9d2;
+      --cream-dark:   #d9d8bf;
+      --white:        #faf9f4;
+      --text-dark:    #2a1a38;
+      --text-mid:     #5a4870;
+      /* padding lateral fluido p/ mobile: cresce com a largura da tela */
+      --pad-x:        clamp(22px, 5.5vw, 56px);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--white);
+      color: var(--text-dark);
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ─────────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(250,249,244,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--cream-dark);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px;
+      height: 68px;
+    }
+
+    .nav-logo {
+      font-size: 1.7rem; font-weight: 700;
+      color: var(--purple-dark);
+      letter-spacing: -0.04em;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .nav-logo-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: var(--yellow); border: 2px solid var(--purple-dark);
+      flex-shrink: 0;
+    }
+
+    .nav-links {
+      display: flex; gap: 32px; list-style: none;
+    }
+    .nav-links a {
+      font-size: 0.9rem; font-weight: 500;
+      color: var(--text-mid); text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--purple-dark); }
+
+    .nav-cta {
+      background: var(--purple-dark); color: #fff;
+      border: none; border-radius: 50px;
+      padding: 10px 24px; font-size: 0.9rem; font-weight: 600;
+      cursor: pointer; text-decoration: none;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .nav-cta:hover { background: var(--purple-mid); transform: translateY(-1px); }
+
+    .nav-logos {
+      display: flex; align-items: center; gap: 16px;
+    }
+    .nav-org-badge {
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.06em;
+      color: var(--purple-mid); opacity: 0.8;
+      text-transform: uppercase;
+    }
+
+    /* ── HERO ─────────────────────────────────────────────── */
+    #hero {
+      min-height: 100vh;
+      background: var(--purple-dark);
+      color: #fff;
+      display: grid; grid-template-columns: 1fr 1fr;
+      align-items: center;
+      padding: 120px 80px 80px;
+      position: relative; overflow: hidden;
+    }
+
+    .hero-blob {
+      position: absolute; border-radius: 50%;
+      filter: blur(80px); opacity: 0.18; pointer-events: none;
+    }
+    .hero-blob-1 { width: 500px; height: 500px; background: var(--purple-mid); top: -100px; right: -100px; }
+    .hero-blob-2 { width: 300px; height: 300px; background: var(--teal); bottom: 0; left: 200px; }
+    .hero-blob-3 { width: 200px; height: 200px; background: var(--yellow); bottom: 100px; right: 300px; }
+
+    .hero-text { position: relative; z-index: 2; }
+
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 50px; padding: 6px 16px;
+      font-size: 0.8rem; color: var(--teal-light);
+      letter-spacing: 0.04em; text-transform: uppercase;
+      font-weight: 600; margin-bottom: 24px;
+    }
+    .hero-tag::before {
+      content: ''; width: 6px; height: 6px;
+      background: var(--yellow); border-radius: 50%;
+    }
+
+    .hero-title {
+      font-size: clamp(3rem, 5vw, 5rem);
+      font-weight: 700; line-height: 1.05;
+      letter-spacing: -0.04em; color: #fff;
+      margin-bottom: 8px;
+    }
+    .hero-title span { color: var(--yellow); }
+
+    .hero-subtitle {
+      font-size: 1.15rem; font-weight: 400;
+      color: rgba(255,255,255,0.65);
+      margin-bottom: 40px;
+      max-width: 480px;
+      line-height: 1.7;
+      text-wrap: pretty;
+    }
+
+    .hero-actions {
+      display: flex; gap: 16px; flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--yellow); color: var(--purple-dark);
+      border-radius: 50px; padding: 16px 32px;
+      font-size: 1rem; font-weight: 700;
+      text-decoration: none; border: none; cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 20px rgba(247,234,110,0.35);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(247,234,110,0.45); }
+
+    .btn-secondary {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: transparent; color: rgba(255,255,255,0.8);
+      border: 1.5px solid rgba(255,255,255,0.25);
+      border-radius: 50px; padding: 16px 28px;
+      font-size: 1rem; font-weight: 500;
+      text-decoration: none; cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-secondary:hover { border-color: rgba(255,255,255,0.6); color: #fff; }
+
+    /* WhatsApp icon */
+    .icon-wa {
+      width: 22px; height: 22px;
+      background: var(--purple-dark);
+      mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z'/%3E%3C/svg%3E");
+      mask-size: contain; mask-repeat: no-repeat; mask-position: center;
+      -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z'/%3E%3C/svg%3E");
+      -webkit-mask-size: contain; -webkit-mask-repeat: no-repeat; -webkit-mask-position: center;
+      flex-shrink: 0;
+    }
+
+    /* Hero illustration area */
+    .hero-visual {
+      position: relative; z-index: 2;
+      display: flex; justify-content: center; align-items: center;
+    }
+
+    .hero-illus-wrap {
+      width: 420px; height: 420px; position: relative;
+    }
+
+    .illus-circle-main {
+      width: 320px; height: 320px; border-radius: 50%;
+      background: var(--purple-mid);
+      position: absolute; top: 50px; left: 50px;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+
+    .illus-circle-float {
+      position: absolute; border-radius: 50%;
+    }
+
+    /* SVG placeholder people illustrations */
+    .person-card {
+      background: var(--cream); border-radius: 20px;
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; gap: 8px;
+      padding: 12px 16px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+    }
+
+    /* ── QUEM SOMOS ─────────────────────────────────────────── */
+    #quem-somos {
+      background: var(--cream);
+      padding: 100px 80px;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 80px; align-items: center;
+    }
+
+    .section-tag {
+      display: inline-block;
+      font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--purple-mid);
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-size: clamp(2rem, 3.5vw, 2.8rem);
+      font-weight: 700; line-height: 1.15;
+      letter-spacing: -0.03em;
+      color: var(--purple-dark);
+      margin-bottom: 24px;
+    }
+    .section-title .accent { color: var(--purple-mid); }
+
+    .section-body {
+      font-size: 1.05rem; line-height: 1.8;
+      color: var(--text-mid);
+      text-wrap: pretty;
+    }
+    .section-body p + p { margin-top: 16px; }
+
+    .qs-visual {
+      display: flex; justify-content: center;
+    }
+
+    /* Decorative blob-shape card */
+    .blob-card {
+      width: 380px; height: 380px; position: relative;
+    }
+
+    .blob-bg {
+      width: 100%; height: 100%; border-radius: 60% 40% 55% 45% / 50% 60% 40% 50%;
+      background: var(--purple-dark);
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .blob-inner {
+      width: 82%; height: 82%;
+      border-radius: 50% 60% 40% 55% / 55% 45% 60% 40%;
+      background: var(--purple-mid);
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+
+    /* ── COMO FUNCIONA ─────────────────────────────────────── */
+    #como-funciona {
+      background: var(--white);
+      padding: 100px 80px;
+    }
+
+    .cf-header {
+      text-align: center;
+      margin-bottom: 64px;
+    }
+
+    .steps-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 40px;
+      max-width: 1000px; margin: 0 auto;
+    }
+
+    .step-card {
+      background: var(--cream);
+      border-radius: 24px;
+      padding: 40px 32px;
+      position: relative;
+      transition: transform 0.25s;
+    }
+    .step-card:hover { transform: translateY(-4px); }
+
+    .step-num {
+      font-size: 4rem; font-weight: 700;
+      color: var(--purple-dark); opacity: 0.12;
+      line-height: 1;
+      margin-bottom: 16px;
+      letter-spacing: -0.04em;
+    }
+
+    .step-icon {
+      width: 52px; height: 52px; border-radius: 16px;
+      margin-bottom: 20px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .step-icon.purple { background: var(--purple-dark); }
+    .step-icon.teal   { background: var(--teal); }
+    .step-icon.yellow { background: var(--yellow); }
+
+    .step-title {
+      font-size: 1.1rem; font-weight: 700;
+      color: var(--purple-dark);
+      margin-bottom: 12px;
+    }
+
+    .step-text {
+      font-size: 0.95rem; line-height: 1.7;
+      color: var(--text-mid);
+      text-wrap: pretty;
+    }
+
+    .step-connector {
+      display: flex; align-items: center; justify-content: center;
+      padding-top: 20px;
+    }
+
+    /* ── WHATSAPP CTA ─────────────────────────────────────── */
+    #whatsapp {
+      background: var(--purple-dark);
+      padding: 100px 80px;
+      text-align: center;
+      position: relative; overflow: hidden;
+    }
+
+    #whatsapp .hero-blob-1 { opacity: 0.12; }
+    #whatsapp .hero-blob-2 { opacity: 0.10; }
+
+    .wa-card {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 32px;
+      padding: 64px 80px;
+      max-width: 720px;
+      margin: 0 auto;
+      position: relative; z-index: 2;
+    }
+
+    .wa-icon-wrap {
+      width: 80px; height: 80px; border-radius: 50%;
+      background: var(--yellow);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 28px;
+    }
+
+    .wa-icon {
+      width: 40px; height: 40px;
+      background: var(--purple-dark);
+      mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z'/%3E%3C/svg%3E");
+      mask-size: contain; mask-repeat: no-repeat; mask-position: center;
+      -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z'/%3E%3C/svg%3E");
+      -webkit-mask-size: contain;
+    }
+
+    .wa-title {
+      font-size: clamp(1.8rem, 3vw, 2.5rem);
+      font-weight: 700; letter-spacing: -0.03em;
+      color: #fff; margin-bottom: 16px;
+    }
+    .wa-title span { color: var(--yellow); }
+
+    .wa-text {
+      font-size: 1.05rem; line-height: 1.75;
+      color: rgba(255,255,255,0.65);
+      margin-bottom: 36px;
+      text-wrap: pretty;
+    }
+
+    .wa-warning {
+      margin-top: 28px;
+      background: rgba(247,234,110,0.12);
+      border: 1px solid rgba(247,234,110,0.3);
+      border-radius: 12px; padding: 14px 20px;
+      font-size: 0.85rem; color: rgba(255,255,255,0.6);
+      line-height: 1.6;
+    }
+    .wa-warning strong { color: var(--yellow); }
+
+    .btn-wa {
+      display: inline-flex; align-items: center; gap: 12px;
+      background: var(--wa-green); color: #fff;
+      border-radius: 50px; padding: 18px 36px;
+      font-size: 1.05rem; font-weight: 700;
+      text-decoration: none; border: none; cursor: pointer;
+      box-shadow: 0 4px 24px rgba(37,211,102,0.4);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-wa:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(74,158,114,0.45); }
+
+    .btn-wa .icon-wa { background: #fff; width: 24px; height: 24px; }
+
+    /* ── OUTROS SERVIÇOS ─────────────────────────────────── */
+    #servicos {
+      background: var(--teal-light);
+      padding: 100px 80px;
+    }
+
+    .srv-header { text-align: center; margin-bottom: 60px; }
+
+    .srv-subtitle {
+      font-size: 1.05rem; color: var(--text-mid);
+      max-width: 600px; margin: 0 auto;
+      line-height: 1.7; text-wrap: pretty;
+    }
+
+    .srv-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 24px; max-width: 1000px; margin: 0 auto 40px;
+    }
+
+    .srv-card {
+      background: var(--white);
+      border-radius: 20px;
+      padding: 32px 28px;
+      transition: transform 0.25s, box-shadow 0.25s;
+      cursor: pointer;
+      display: block;         
+      text-decoration: none; 
+      color: inherit;
+    }
+    .srv-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(92,42,127,0.1); }
+
+    .srv-card-icon {
+      width: 48px; height: 48px; border-radius: 14px;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .srv-card-icon img {
+      width: 85%;
+      height: auto;
+      display: block;
+      object-fit: contain; 
+    }
+    .srv-card-icon.c1 { background: var(--purple-dark); }
+    .srv-card-icon.c2 { background: var(--teal); }
+    .srv-card-icon.c3 { background: var(--purple-mid); }
+
+    .srv-card-title {
+      font-size: 1rem; font-weight: 700;
+      color: var(--purple-dark); margin-bottom: 8px;
+    }
+    .srv-card-text {
+      font-size: 0.9rem; line-height: 1.65;
+      color: var(--text-mid);
+    }
+
+    .srv-cta-center { text-align: center; }
+
+    .btn-outline {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: transparent; color: var(--purple-dark);
+      border: 2px solid var(--purple-dark);
+      border-radius: 50px; padding: 14px 32px;
+      font-size: 0.95rem; font-weight: 700;
+      text-decoration: none; cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-outline:hover { background: var(--purple-dark); color: #fff; }
+
+    /* ── COORDENADORES ───────────────────────────────────── */
+    #coordenadores {
+      background: var(--white);
+      padding: 100px 80px;
+    }
+
+    .coord-header { text-align: center; margin-bottom: 60px; }
+
+    .coord-grid {
+      display: grid; grid-template-columns: repeat(5, 1fr);
+      gap: 28px; max-width: 1000px; margin: 0 auto;
+    }
+
+    .coord-card {
+      text-align: center;
+    }
+
+    .coord-avatar {
+      width: 100px; height: 100px; border-radius: 50%;
+      margin: 0 auto 16px;
+      object-fit: cover;
+      display: block;
+      background: var(--purple-mid);
+    }
+    .coord-name {
+      font-size: 0.95rem; font-weight: 700;
+      color: var(--purple-dark); margin-bottom: 4px;
+    }
+    .coord-role {
+      font-size: 0.82rem; color: var(--text-mid);
+      line-height: 1.5;
+    }
+
+    /* ── RODAPÉ ──────────────────────────────────────────── */
+    footer {
+      background: var(--purple-dark);
+      padding: 64px 80px 40px;
+      color: rgba(255,255,255,0.7);
+    }
+
+    .footer-top {
+      display: grid; grid-template-columns: 2fr 1fr 1fr;
+      gap: 60px; margin-bottom: 56px;
+    }
+
+    .footer-brand-name {
+      font-size: 2rem; font-weight: 700; color: #fff;
+      letter-spacing: -0.04em; margin-bottom: 12px;
+    }
+    .footer-brand-desc {
+      font-size: 0.9rem; line-height: 1.7;
+      max-width: 340px; text-wrap: pretty;
+    }
+
+    .footer-col-title {
+      font-size: 0.75rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: rgba(255,255,255,0.4); margin-bottom: 20px;
+    }
+
+    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-links a { color: rgba(255,255,255,0.6); text-decoration: none; font-size: 0.9rem; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--yellow); }
+
+    .footer-socials {
+      display: flex; gap: 12px; margin-top: 20px;
+    }
+
+    .social-btn {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.15);
+      display: flex; align-items: center; justify-content: center;
+      text-decoration: none; color: rgba(255,255,255,0.7);
+      font-size: 0.75rem; font-weight: 700;
+      transition: all 0.2s;
+    }
+    .social-btn:hover { background: var(--yellow); color: var(--purple-dark); border-color: var(--yellow); }
+
+    .footer-logos {
+      border-top: 1px solid rgba(255,255,255,0.1);
+      padding-top: 32px;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 24px;
+    }
+
+    .footer-org-logos {
+      display: flex; align-items: center; gap: 32px; flex-wrap: wrap;
+    }
+
+    .org-logo-badge {
+      display: flex; flex-direction: column; align-items: center; gap: 4px;
+    }
+
+    .org-logo-icon {
+      width: 44px; height: 44px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .org-logo-icon.ufba { background: var(--purple-mid); }
+    .org-logo-icon.usp  { background: #1a5276; }
+    .org-logo-icon.fcf  { background: #922b21; }
+
+    .org-logo-text {
+      font-size: 0.65rem; font-weight: 700; letter-spacing: 0.08em;
+      color: rgba(255,255,255,0.4); text-transform: uppercase;
+    }
+
+    .org-logo-abbr {
+      font-size: 0.8rem; font-weight: 800; color: #fff; letter-spacing: -0.02em;
+    }
+
+    .footer-copy {
+      font-size: 0.8rem; color: rgba(255,255,255,0.35);
+    }
+
+    /* ── SCROLL ANIMATIONS ─────────────────────────────── */
+    .fade-up {
+      opacity: 0; transform: translateY(32px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .fade-up.visible {
+      opacity: 1; transform: translateY(0);
+    }
+
+    /* ── FLOATING WA BUTTON ────────────────────────────── */
+    .float-wa {
+      position: fixed; bottom: 32px; right: 32px; z-index: 200;
+      width: 60px; height: 60px; border-radius: 50%;
+      background: var(--wa-green);
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 20px rgba(74,158,114,0.45);
+      text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+      animation: pulse-wa 3s ease-in-out infinite;
+    }
+    .float-wa:hover { transform: scale(1.1); box-shadow: 0 8px 30px rgba(74,158,114,0.55); animation: none; }
+    .float-wa .icon-wa { background: #fff; width: 28px; height: 28px; }
+
+    @keyframes pulse-wa {
+      0%, 100% { box-shadow: 0 4px 20px rgba(74,158,114,0.45); }
+      50% { box-shadow: 0 4px 36px rgba(74,158,114,0.65); }
+    }
+
+    /* Decorative SVG placeholders */
+    .illus-placeholder {
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: 6px;
+    }
+    .illus-label {
+      font-size: 0.65rem; font-weight: 600;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      color: rgba(255,255,255,0.5); text-align: center;
+      padding: 0 8px;
+    }
+
+    /* ── MENU MOBILE (hambúrguer) ──────────────────────── */
+    .nav-burger { display: none; }
+
+    .mobile-menu {
+      display: none;
+      position: fixed; top: 68px; left: 0; right: 0; z-index: 99;
+      background: rgba(250,249,244,0.98);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--cream-dark);
+      flex-direction: column;
+      padding: 12px var(--pad-x) 24px;
+      transform: translateY(-130%);
+      transition: transform 0.3s ease;
+      box-shadow: 0 12px 32px rgba(42,26,56,0.12);
+    }
+    .mobile-menu.open { transform: translateY(0); }
+    .mobile-menu a {
+      text-decoration: none; color: var(--text-mid);
+      font-size: 1.05rem; font-weight: 500;
+      padding: 16px 4px; border-bottom: 1px solid var(--cream);
+      transition: color 0.2s;
+    }
+    .mobile-menu a:hover { color: var(--purple-dark); }
+    .mobile-menu-cta {
+      margin-top: 16px; background: var(--purple-dark);
+      color: #fff !important; text-align: center;
+      border-radius: 50px; padding: 16px !important;
+      font-weight: 600 !important; border-bottom: none !important;
+    }
+
+    /* utilitário: quebra de linha que só aparece no celular */
+    .br-phone { display: none; }
+
+    /* ── BREAKPOINT: TABLET / MOBILE (≤ 960px) ─────────── */
+    @media (max-width: 960px) {
+      /* NAV */
+      nav { padding: 0 var(--pad-x); }
+      .nav-links { display: none; }
+      nav .nav-cta, .nav-org-badge { display: none; }
+      .nav-burger {
+        display: flex; flex-direction: column; justify-content: center; gap: 5px;
+        width: 44px; height: 44px; padding: 10px;
+        background: transparent; border: none; cursor: pointer;
+      }
+      .nav-burger span {
+        display: block; height: 2px; width: 100%;
+        background: var(--purple-dark); border-radius: 2px;
+        transition: transform 0.25s, opacity 0.2s;
+      }
+      .nav-burger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+      .nav-burger.open span:nth-child(2) { opacity: 0; }
+      .nav-burger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+      .mobile-menu { display: flex; }
+
+      /* HERO */
+      #hero {
+        grid-template-columns: 1fr;
+        padding: 104px var(--pad-x) 64px;
+        gap: 48px; min-height: auto;
+      }
+      #hero .hero-subtitle { margin-bottom: 32px; max-width: none; }   /* largura cheia, padronizada com o Quem Somos */
+      /* botões empilhados + caixa do WhatsApp: distância vertical uniforme (28px) */
+      #hero .hero-actions { row-gap: 28px; }
+      #hero [style*="margin-top:36px"] { margin-top: 28px !important; }
+      #hero .hero-visual { justify-content: flex-start; }   /* alinha ilustração à esquerda */
+      #hero .hero-illus-wrap { width: 300px !important; height: auto !important; margin: 0 0 0 16px; }
+      #hero .hero-illus-wrap img { width: 250px !important; }
+
+      /* Seções têm uma <div> interna que repete padding/grid.
+         No mobile, neutraliza a <section> e deixa a div interna mandar no layout. */
+      #quem-somos, #como-funciona, #whatsapp, #servicos, #coordenadores {
+        display: block !important;
+        padding: 0 !important;
+      }
+
+      /* QUEM SOMOS */
+      #quem-somos { overflow-x: hidden; }   /* impede vazamento dos elementos flutuantes */
+      #quem-somos > div {
+        grid-template-columns: 1fr !important;
+        padding: 64px var(--pad-x) !important;
+        gap: 56px !important;
+      }
+      #quem-somos .qs-visual { justify-content: flex-start !important; }   /* ilustração à esquerda */
+      #quem-somos .qs-visual > div { width: min(330px, 82vw) !important; }
+      /* illus-6 (acento decorativo): menor e trazida p/ dentro da caixa */
+      #quem-somos .qs-visual div[style*="bottom:-20px"] { right: 0 !important; bottom: -8px !important; }
+      #quem-somos .qs-visual div[style*="bottom:-20px"] img { width: 96px !important; }
+      /* card "8+" trazido p/ dentro */
+      #quem-somos .qs-visual div[style*="top:16px"] { left: 0 !important; }
+      .qs-stats { flex-wrap: wrap; gap: 24px !important; }
+
+      /* COMO FUNCIONA */
+      #como-funciona > div { padding: 64px var(--pad-x) !important; }
+      .steps-grid { grid-template-columns: 1fr; gap: 24px; max-width: 460px; }
+      /* caixa final: mesma largura dos cards de passo */
+      #como-funciona [style*="max-width:680px"] { max-width: 460px !important; }
+
+      /* WHATSAPP */
+      #whatsapp > div { padding: 64px var(--pad-x) !important; }
+      .wa-card { padding: 44px 28px; }
+      #whatsapp img[style*="position:absolute"] { display: none !important; }
+      /* texto e caixa de aviso com a mesma largura lateral */
+      #whatsapp .wa-text, #whatsapp .wa-warning { max-width: 470px; margin-left: auto; margin-right: auto; }
+
+      /* SERVIÇOS */
+      #servicos > div { padding: 64px var(--pad-x) !important; }
+      .srv-grid { grid-template-columns: 1fr; max-width: 460px; }
+
+      /* COORDENADORES */
+      #coordenadores > div { padding: 64px var(--pad-x) !important; }
+      /* flex + center: a última linha ímpar fica centralizada */
+      .coord-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 28px; max-width: 480px; }
+      .coord-card { width: calc((100% - 56px) / 3); }
+
+      /* FOOTER */
+      footer { padding: 48px var(--pad-x) 32px; }
+      /* tablet: brand · Navegação · Contato na mesma linha */
+      .footer-top { grid-template-columns: 2fr 1fr 1fr; gap: 32px; margin-bottom: 40px; }
+      .footer-brand-desc { max-width: 280px; }   /* caixa de texto do brand menor */
+      .footer-socials { flex-wrap: wrap; }
+      .footer-logos { flex-direction: column; align-items: flex-start; gap: 20px; }
+
+      /* FLOAT WA */
+      .float-wa { bottom: 20px; right: 20px; width: 54px; height: 54px; }
+    }
+
+    /* ── BREAKPOINT: CELULAR (≤ 520px) ─────────────────── */
+    @media (max-width: 520px) {
+      .br-phone { display: inline; }
+      /* 3 stats do Quem Somos numa única linha no celular */
+      .qs-stats { flex-wrap: nowrap !important; gap: 12px !important; }
+      .qs-stats > div { flex: 1 1 0; min-width: 0; }
+      .qs-stats > div[style*="width:1px"] { flex: 0 0 1px; }
+      .qs-stats [style*="width: 180px"] { width: auto !important; }
+      .qs-stats [style*="font-size: 25px"], .qs-stats [style*="font-size: 1.6rem"] { font-size: 1.25rem !important; }
+      .hero-title { font-size: 2.6rem; }
+      .coord-grid { gap: 24px; max-width: 320px; }
+      .coord-card { width: calc((100% - 24px) / 2); }
+      .wa-card { padding: 36px 20px; }
+      .wa-card .wa-title { font-size: 1.7rem; }
+      .section-title { font-size: 2rem; }
+      /* celular: brand no topo (largura cheia) + Navegação | Contato lado a lado */
+      .footer-top { grid-template-columns: 1fr 1fr; gap: 32px 24px; }
+      .footer-top > div:first-child { grid-column: 1 / -1; }
+      .footer-brand-desc { max-width: none; }
+    }
+
+    /* ── TABLET: título do hero flui na largura (sem quebras forçadas) ── */
+    @media (min-width: 521px) and (max-width: 960px) {
+      .hero-title br { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── FLOATING WHATSAPP ─────────────────────────────────── -->
+<a href="https://wa.me/5511982275003" target="_blank" class="float-wa" title="Fale conosco pelo WhatsApp">
+  <span class="icon-wa"></span>
+</a>
+
+<!-- ── NAV ───────────────────────────────────────────────── -->
+<nav>
+  <div class="nav-logo" style="display:flex;align-items:center;gap:8px;">
+    <!-- Bolhas de conversa -->
+    <svg width="42" height="42" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">
+      <rect x="2" y="2" width="32" height="24" rx="7" fill="#5c2a7f"/>
+      <circle cx="10" cy="14" r="3" fill="#f7a93e"/>
+      <circle cx="18" cy="14" r="3" fill="#f7a93e"/>
+      <circle cx="26" cy="14" r="3" fill="#f7a93e"/>
+      <path d="M6 26 L11 33 L18 26Z" fill="#5c2a7f"/>
+      <rect x="16" y="18" width="32" height="24" rx="7" fill="#f7a93e"/>
+      <circle cx="24" cy="30" r="3" fill="#5c2a7f"/>
+      <circle cx="32" cy="30" r="3" fill="#5c2a7f"/>
+      <circle cx="40" cy="30" r="3" fill="#5c2a7f"/>
+      <path d="M22 42 L27 49 L34 42Z" fill="#f7a93e"/>
+    </svg>
+    <!-- Texto do logo -->
+    <span style="font-family:'DM Sans',sans-serif;font-weight:800;font-size:1.75rem;letter-spacing:-0.04em;line-height:1;color:#5c2a7f;">Dig<span style="color:#97bec7;">A<span style="position:relative;">I<span style="position:absolute;top:-6px;right:-4px;width:7px;height:7px;border-radius:50%;background:#f7a93e;display:inline-block;"></span></span></span></span>
+  </div>
+
+  <ul class="nav-links">
+    <li><a href="#quem-somos">Quem Somos</a></li>
+    <li><a href="#como-funciona">Como Funciona</a></li>
+    <li><a href="#servicos">Serviços</a></li>
+    <li><a href="#coordenadores">Equipe</a></li>
+  </ul>
+
+  <div style="display:flex;align-items:center;gap:24px;">
+    <div class="nav-logos">
+      <span class="nav-org-badge">FCF · USP</span>
+    </div>
+    <a href="#whatsapp" class="nav-cta">Fale Conosco</a>
+  </div>
+
+  <button class="nav-burger" id="navBurger" aria-label="Abrir menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- ── MENU MOBILE ───────────────────────────────────────── -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#quem-somos">Quem Somos</a>
+  <a href="#como-funciona">Como Funciona</a>
+  <a href="#servicos">Serviços</a>
+  <a href="#coordenadores">Equipe</a>
+  <a href="#whatsapp" class="mobile-menu-cta">Fale Conosco</a>
+</div>
+
+<!-- ── HERO ─────────────────────────────────────────────── -->
+<section id="hero" data-screen-label="Hero">
+  <div class="hero-blob hero-blob-1"></div>
+  <div class="hero-blob hero-blob-2"></div>
+  <div class="hero-blob hero-blob-3"></div>
+
+  <div class="hero-text">
+    <div class="hero-tag">FCF · Universidade de São Paulo</div>
+    <h1 class="hero-title">
+      Acolhimento<br/>
+      <span>virtual</span><br/>
+      para você.
+    </h1>
+    <p class="hero-subtitle">
+      O DigAI oferece escuta qualificada e humanizada para toda a comunidade da Faculdade de Ciências Farmacêuticas da USP.
+    </p>
+    <div class="hero-actions">
+      <a href="#whatsapp" class="btn-primary">
+        <span class="icon-wa"></span>
+        Falar pelo WhatsApp
+      </a>
+      <a href="#quem-somos" class="btn-secondary">Saiba mais ↓</a>
+    </div>
+
+    <!-- Número visível no hero -->
+    <div style="margin-top:36px;display:inline-flex;align-items:center;gap:14px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:16px;padding:14px 24px;">
+      <div style="width:36px;height:36px;border-radius:50%;background:var(--wa-green);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+      </div>
+      <div>
+        <div style="font-size:0.68rem;color:rgba(255,255,255,0.45);letter-spacing:0.08em;text-transform:uppercase;font-weight:600;">WhatsApp</div>
+        <div style="font-size:1.1rem;font-weight:700;color:#fff;letter-spacing:0.02em;">(11) 982275003</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-visual">
+    <div class="hero-illus-wrap" style="position:relative;width:400px;height:460px;display:flex;align-items:center;justify-content:center;">
+
+      <!-- Main illustration — mix-blend-mode:multiply removes white bg on dark purple -->
+      <img src="illus-4.png" alt="Acolhimento virtual" style="width:360px;height:auto;display:block;mix-blend-mode:multiply;position:relative;z-index:2;" />
+
+      <!-- Chip: Gratuito — top right -->
+      <div style="position:absolute;top:0;right:-16px;background:var(--yellow);border-radius:16px;padding:12px 20px;box-shadow:0 8px 24px rgba(0,0,0,0.25);z-index:3;">
+        <div style="font-size:0.78rem;font-weight:700;color:var(--purple-dark);">Gratuito</div>
+        <div style="font-size:0.65rem;color:var(--purple-mid);">para a FCF-USP</div>
+      </div>
+
+      <!-- Chip: Escuta ativa — bottom left, far from Gratuito -->
+      <div style="position:absolute;bottom:0;left:-16px;background:rgba(151,190,199,0.95);border-radius:16px;padding:12px 20px;box-shadow:0 8px 24px rgba(0,0,0,0.2);backdrop-filter:blur(8px);z-index:3;">
+        <div style="font-size:0.78rem;font-weight:700;color:var(--purple-dark);">Escuta ativa</div>
+        <div style="font-size:0.65rem;color:var(--text-dark);opacity:0.8;">Humanizada e virtual</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── QUEM SOMOS ─────────────────────────────────────────── -->
+<section id="quem-somos" data-screen-label="Quem Somos">
+  <div style="background:var(--cream);padding:100px 80px;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;">
+    <div class="qs-visual fade-up" style="position:relative;display:flex;justify-content:center;">
+      <div style="position:relative;width:380px;">
+        <!-- Main illustration -->
+        <img src="illus-3.png" alt="Pessoa sendo acolhida" style="width:100%;height:auto;display:block;filter:drop-shadow(0 12px 40px rgba(92,42,127,0.18));" />
+
+        <!-- Floating illustration accent -->
+        <div style="position:absolute;bottom:-20px;right:-20px;">
+          <img src="illus-6.png" alt="" style="width:140px;height:auto;filter:drop-shadow(0 8px 24px rgba(0,0,0,0.15));" />
+        </div>
+
+        <!-- Stats floating -->
+        <div style="position:absolute;top:16px;left:-16px;background:var(--white);border-radius:20px;padding:16px 24px;box-shadow:0 8px 32px rgba(92,42,127,0.15);">
+          <div style="font-size:1.8rem;font-weight:700;color:var(--purple-dark);line-height:1;">8+</div>
+          <div style="font-size:0.75rem;color:var(--text-mid);margin-top:2px;">anos de atuação<br/>na UFBA</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fade-up" style="animation-delay:0.1s;">
+      <span class="section-tag">Quem Somos</span>
+      <h2 class="section-title">Uma iniciativa que <span class="accent">acolhe</span> de quem cuida</h2>
+      <div class="section-body">
+        <p>O DigAI surgiu como uma expansão do programa de Saúde Mental e Bem-Estar <strong>PsiU</strong>, que atua há mais de 8 anos na Universidade Federal da Bahia, e agora se estende à <strong>Faculdade de Ciências Farmacêuticas da Universidade de São Paulo</strong>.</p>
+        <p>A iniciativa oferece acolhimento remoto a toda a comunidade da FCF-USP, com o objetivo de promover ações voltadas à saúde mental e ao bem-estar.</p>
+      </div>
+
+      <div class="qs-stats" style="margin-top:40px;display:flex;gap:32px;">
+        <div>
+          <div style="font-size: 25px; font-weight: 700; color: var(--purple-dark); text-align: center">FCF-USP</div>
+          <div style="font-size: 0.8rem; color: var(--text-mid); margin-top: 2px; text-align: center">Comunidade <br class="br-phone">atendida</div>
+        </div>
+        <div style="width:1px;background:var(--cream-dark);"></div>
+        <div>
+          <div style="font-size: 1.6rem; font-weight: 700; color: var(--purple-dark); text-align: center">100%</div>
+          <div style="font-size: 0.8rem; color: var(--text-mid); margin-top: 2px; text-align: center">Gratuito</div>
+        </div>
+        <div style="width:1px;background:var(--cream-dark);"></div>
+        <div>
+          <div style="font-size: 1.6rem; font-weight: 700; color: var(--purple-dark); text-align: center">Virtual</div>
+          <div style="font-size: 0.8rem; color: var(--text-mid); margin-top: 2px; width: 180px; text-align: center">Acessível de <br class="br-phone">onde estiver</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── COMO FUNCIONA ─────────────────────────────────────── -->
+<section id="como-funciona" data-screen-label="Como Funciona">
+  <div style="background:var(--white);padding:100px 80px;">
+    <div class="cf-header fade-up">
+      <span class="section-tag">Passo a passo</span>
+      <h2 class="section-title" style="text-align:center;">Como funciona o<br/><span class="accent">DigAI?</span></h2>
+      <p class="srv-subtitle" style="margin-top:12px;">Um processo simples, acolhedor e completamente virtual.</p>
+    </div>
+
+    <div class="steps-grid">
+      <div class="step-card fade-up" style="animation-delay:0.05s;">
+        <div style="display:flex;justify-content:center;margin-bottom:16px;">
+          <img src="illus-2.png" alt="" style="height:160px;width:auto;object-fit:contain;filter:drop-shadow(0 4px 12px rgba(0,0,0,0.1));" />
+        </div>
+        <div class="step-num">01</div>
+        <h3 class="step-title">Envie uma mensagem</h3>
+        <p class="step-text">Entre em contato pelo WhatsApp. Basta uma mensagem para dar o primeiro passo no cuidado com sua saúde mental.</p>
+      </div>
+
+      <div class="step-card fade-up" style="animation-delay:0.1s;">
+        <div style="display:flex;justify-content:center;margin-bottom:16px;">
+          <img src="illus-5.png" alt="" style="height:160px;width:auto;object-fit:contain;filter:drop-shadow(0 4px 12px rgba(0,0,0,0.1));" />
+        </div>
+        <div class="step-num">02</div>
+        <h3 class="step-title">Conheça seu acolhedor</h3>
+        <p class="step-text">Você será encaminhado a um de nossos acolhedores treinados, que realizará o agendamento de um encontro virtual.</p>
+      </div>
+
+      <div class="step-card fade-up" style="animation-delay:0.15s;">
+        <div style="display:flex;justify-content:center;margin-bottom:16px;">
+          <img src="illus-4.png" alt="" style="height:160px;width:auto;object-fit:contain;filter:drop-shadow(0 4px 12px rgba(0,0,0,0.1));" />
+        </div>
+        <div class="step-num">03</div>
+        <h3 class="step-title">Sessão de acolhimento</h3>
+        <p class="step-text">Realize o encontro virtual de acolhimento — uma escuta humanizada, no horário que funcionar melhor para você.</p>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-top:56px;" class="fade-up">
+      <div style="background:var(--cream);border-radius:20px;padding:32px 48px;display:inline-block;max-width:680px;">
+        <p style="font-size:1rem;line-height:1.75;color:var(--text-mid);text-wrap:pretty;">
+          O DigAI oferece uma escuta qualificada e humanizada, de forma virtual, para a comunidade da FCF-USP. Para acessar, basta enviar uma mensagem pelo WhatsApp.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── WHATSAPP CTA ─────────────────────────────────────── -->
+<section id="whatsapp" data-screen-label="WhatsApp CTA">
+  <div style="background:var(--purple-dark);padding:100px 80px;text-align:center;position:relative;overflow:hidden;">
+    <div class="hero-blob hero-blob-1" style="opacity:0.12;"></div>
+    <div class="hero-blob hero-blob-2" style="opacity:0.10;"></div>
+
+    <!-- Decorative floating illustrations -->
+    <img src="illus-2.png" alt="" style="position:absolute;left:5%;bottom:0;height:280px;width:auto;opacity:0.25;pointer-events:none;z-index:1;" />
+    <img src="illus-1.png" alt="" style="position:absolute;right:5%;top:10%;height:240px;width:auto;opacity:0.2;pointer-events:none;z-index:1;" />
+
+    <div class="wa-card fade-up">
+      <div class="wa-icon-wrap">
+        <div class="wa-icon"></div>
+      </div>
+      <h2 class="wa-title">Manda um oi<br/><span>que a gente responde.</span></h2>
+      <p class="wa-text">
+        Fale conosco pelo WhatsApp. Estamos aqui para ouvir você.
+      </p>
+
+      <!-- Número visível -->
+      <div style="display:inline-flex;align-items:center;gap:14px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.2);border-radius:16px;padding:14px 28px;margin-bottom:28px;">
+        <div style="width:36px;height:36px;border-radius:50%;background:var(--wa-green);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+        </div>
+        <div>
+          <div style="font-size:0.68rem;color:rgba(255,255,255,0.45);letter-spacing:0.08em;text-transform:uppercase;font-weight:600;">WhatsApp</div>
+          <div style="font-size:1.4rem;font-weight:700;color:#fff;letter-spacing:0.02em;">(11) 982275003</div>
+        </div>
+      </div>
+      <br/>
+      <a href="https://wa.me/5511982275003" target="_blank" class="btn-wa">
+        <span class="icon-wa" style="background:#fff;width:24px;height:24px;display:inline-block;mask-image:url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27%3E%3Cpath d=%27M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z%27/%3E%3C/svg%3E');-webkit-mask-image:url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27%3E%3Cpath d=%27M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z%27/%3E%3C/svg%3E');mask-size:contain;mask-repeat:no-repeat;mask-position:center;-webkit-mask-size:contain;-webkit-mask-repeat:no-repeat;-webkit-mask-position:center;flex-shrink:0;"></span>
+        Enviar mensagem
+      </a>
+
+      <div class="wa-warning">
+        <strong>Atenção:</strong> este número não recebe ligações, sendo utilizado exclusivamente para mensagens e encaminhamento ao acolhedor.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── OUTROS SERVIÇOS ─────────────────────────────────── -->
+<section id="servicos" data-screen-label="Outros Serviços">
+  <div style="background:var(--teal-light);padding:100px 80px;">
+    <div class="srv-header fade-up">
+      <span class="section-tag">Rede de apoio</span>
+      <h2 class="section-title" style="text-align:center;">Outros serviços<br/><span class="accent">psicológicos gratuitos</span></h2>
+      <p class="srv-subtitle" style="margin-top:16px;">
+        Conheça outros serviços disponíveis na universidade e na cidade de São Paulo e descubra como eles podem apoiar você no cuidado com a sua saúde mental.
+      </p>
+    </div>
+
+    <div class="srv-grid">
+      <a href="INSIRA_O_LINK_AQUI" target="_blank" class="srv-card fade-up" style="animation-delay:0.05s;">
+        <div class="srv-card-icon c1">
+          <img src="illus-1.png">
+        </div>
+        <h3 class="srv-card-title">Serviços USP</h3>
+        <p class="srv-card-text">Atendimento psicológico e psiquiátrico gratuito disponível para estudantes, docentes e funcionários da Universidade de São Paulo.</p>
+      </a>
+
+      <a href="INSIRA_O_LINK_AQUI" target="_blank" class="srv-card fade-up" style="animation-delay:0.1s;">
+        <div class="srv-card-icon c2">
+          <img src="illus-2.png">
+        </div>
+        <h3 class="srv-card-title">Serviços - Cidade de São Paulo</h3>
+        <p class="srv-card-text">Serviços psicológicos e psiquiátricos distribuídos pela cidade de São Paulo.</p>
+      </a>
+
+      <a href="https://cvv.org.br" target="_blank" class="srv-card fade-up" style="animation-delay:0.15s;">
+        <div class="srv-card-icon c3">
+          <img src="illus-1-mirror.png">
+        </div>
+        <h3 class="srv-card-title">CVV – Apoio Emocional</h3>
+        <p class="srv-card-text">Centro de Valorização da Vida: apoio emocional e prevenção do suicídio, 24h por dia. Ligue 188 ou acesse cvv.org.br.</p>
+      </a>
+    </div>
+
+    <div class="srv-cta-center fade-up">
+      <a href="#" class="btn-outline">Ver todos os recursos ↗</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── COORDENADORES ───────────────────────────────────── -->
+<section id="coordenadores" data-screen-label="Coordenadores">
+  <div style="background:var(--white);padding:100px 80px;">
+    <div class="coord-header fade-up">
+      <span class="section-tag">Equipe</span>
+      <h2 class="section-title" style="text-align:center;">Coordenadores<br/>do <span class="accent">projeto</span></h2>
+    </div>
+
+    <div class="coord-grid">
+      <div class="coord-card fade-up" style="animation-delay:0.1s;">
+        <img src="marceloveras.jpg" alt="Marcelo Veras" class="coord-avatar" />
+        <div class="coord-name">Marcelo Veras</div>
+        <div class="coord-role">Coordenação<br/>DigAI</div>
+      </div>
+      <div class="coord-card fade-up" style="animation-delay:0.15s;">
+        <img src="carlotarangel.jpg" alt="Carlota Rangel" class="coord-avatar" />
+        <div class="coord-name">Carlota Rangel Yagui</div>
+        <div class="coord-role">Coordenação<br/>FCF-USP</div>
+      </div>
+      <div class="coord-card fade-up" style="animation-delay:0.2s;">
+        <img src="helenadaquanno.jpeg" alt="Helena Daquanno" class="coord-avatar" />
+        <div class="coord-name">Helena Daquanno Testi</div>
+        <div class="coord-role">Supervisão Clínica<br/>DigAI</div>
+      </div>
+        <div class="coord-card fade-up" style="animation-delay:0.25s;">
+        <img src="anastelasande.jpg" alt="Ana Stela Sande" class="coord-avatar" />
+        <div class="coord-name">Ana Stela Sande</div>
+        <div class="coord-role">Supervisão Clínica<br/>DigAI</div>
+      </div>
+        <div class="coord-card fade-up" style="animation-delay:0.05s;">
+        <img src="gabrielveronez.jpg" alt="Gabriel Veronez" class="coord-avatar" />
+        <div class="coord-name">Gabriel Veronez</div>
+        <div class="coord-role">Supervisão de Acolhedores<br/>DigAI</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ─────────────────────────────────────────── -->
+<footer data-screen-label="Footer">
+  <div class="footer-top">
+    <div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+        <svg width="38" height="38" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">
+          <rect x="2" y="2" width="32" height="24" rx="7" fill="#876b9b"/>
+          <circle cx="10" cy="14" r="3" fill="#f7a93e"/>
+          <circle cx="18" cy="14" r="3" fill="#f7a93e"/>
+          <circle cx="26" cy="14" r="3" fill="#f7a93e"/>
+          <path d="M6 26 L11 33 L18 26Z" fill="#876b9b"/>
+          <rect x="16" y="18" width="32" height="24" rx="7" fill="#f7a93e"/>
+          <circle cx="24" cy="30" r="3" fill="#fff"/>
+          <circle cx="32" cy="30" r="3" fill="#fff"/>
+          <circle cx="40" cy="30" r="3" fill="#fff"/>
+          <path d="M22 42 L27 49 L34 42Z" fill="#f7a93e"/>
+        </svg>
+        <span style="font-family:'DM Sans',sans-serif;font-weight:800;font-size:1.75rem;letter-spacing:-0.04em;line-height:1;color:#fff;">Dig<span style="color:#97bec7;">A<span style="position:relative;">I<span style="position:absolute;top:-5px;right:-4px;width:7px;height:7px;border-radius:50%;background:#f7a93e;display:inline-block;"></span></span></span></span>
+      </div>
+      <p class="footer-brand-desc">
+        Acolhimento virtual para a comunidade da Faculdade de Ciências Farmacêuticas da Universidade de São Paulo. Uma iniciativa do programa PsiU — UFBA.
+      </p>
+      <div class="footer-socials">
+        <a href="https://www.instagram.com/psiu_escuta" target="_blank" class="social-btn" title="Instagram">In</a>
+        <a href="https://www.facebook.com/psiunauniversidade" target="_blank" class="social-btn" title="Facebook">Fb</a>
+        <a href="https://www.youtube.com/@psiuufba-programadesaudeme8297" target="_blank" class="social-btn" title="YouTube">Yt</a>
+        <a href="https://wa.me/5511982275003" target="_blank" class="social-btn" title="WhatsApp">Wa</a>
+      </div>
+    </div>
+
+    <div>
+      <div class="footer-col-title">Navegação</div>
+      <ul class="footer-links">
+        <li><a href="#quem-somos">Quem Somos</a></li>
+        <li><a href="#como-funciona">Como Funciona</a></li>
+        <li><a href="#whatsapp">Fale Conosco</a></li>
+        <li><a href="#servicos">Outros Serviços</a></li>
+        <li><a href="#coordenadores">Equipe</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <div class="footer-col-title">Contato</div>
+      <ul class="footer-links">
+        <li><a href="https://wa.me/5511982275003" target="_blank">WhatsApp</a></li>
+        <li><a href="https://www.instagram.com/psiu_escuta" target="_blank">Instagram</a></li>
+        <li><a href="https://www.facebook.com/psiunauniversidade" target="_blank">Facebook</a></li>
+        <li><a href="https://www.youtube.com/@psiuufba-programadesaudeme8297" target="_blank">YouTube</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-logos">
+    <div class="footer-org-logos">
+      <div class="org-logo-badge">
+        <div class="org-logo-icon ufba" style="display:flex;align-items:center;justify-content:center;">
+          <span class="org-logo-abbr">U</span>
+        </div>
+        <span class="org-logo-text">UFBA</span>
+      </div>
+      <div class="org-logo-badge">
+        <div class="org-logo-icon usp" style="display:flex;align-items:center;justify-content:center;">
+          <span class="org-logo-abbr">U</span>
+        </div>
+        <span class="org-logo-text">USP</span>
+      </div>
+      <div class="org-logo-badge">
+        <div class="org-logo-icon fcf" style="display:flex;align-items:center;justify-content:center;">
+          <span class="org-logo-abbr">F</span>
+        </div>
+        <span class="org-logo-text">FCF</span>
+      </div>
+    </div>
+
+    <div class="footer-copy">
+      © 2026 DigAI · FCF-USP · Todos os direitos reservados
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Scroll animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+  // Menu mobile (hambúrguer)
+  const burger = document.getElementById('navBurger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  if (burger && mobileMenu) {
+    burger.addEventListener('click', () => {
+      const isOpen = mobileMenu.classList.toggle('open');
+      burger.classList.toggle('open', isOpen);
+      burger.setAttribute('aria-expanded', isOpen);
+    });
+    mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+      mobileMenu.classList.remove('open');
+      burger.classList.remove('open');
+      burger.setAttribute('aria-expanded', 'false');
+    }));
+  }
+
+  // Smooth active nav link
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(section => {
+      const sectionTop = section.offsetTop - 100;
+      if (window.scrollY >= sectionTop) {
+        current = section.getAttribute('id');
+      }
+    });
+    navLinks.forEach(link => {
+      link.style.color = '';
+      if (link.getAttribute('href') === '#' + current) {
+        link.style.color = 'var(--purple-dark)';
+        link.style.fontWeight = '700';
+      } else {
+        link.style.fontWeight = '500';
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
